@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 localparam EGF_ORDER = 4;
-//localparam logic EGF_PRI_POL[EGF_ORDER : 0] = '{1, 0, 0, 1, 1};
+localparam logic EGF_PRI_POL[EGF_ORDER : 0] = '{1, 0, 0, 1, 1};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ localparam RS_COD_LEN = 2 ** EGF_ORDER - 1;
 localparam RS_MES_LEN = RS_COD_LEN - RS_PAR_LEN;
 
 //localparam logic [RS_PAR_LEN : 0][EGF_ORDER - 1 : 0] RS_GEN_POL = '{'b0001, 'b0110, 'b1000};
-//localparam logic [RS_PAR_LEN : 0][EGF_ORDER - 1 : 0] RS_GEN_POL = '{'b0001, 'b1101, 'b1100, 'b1000, 'b0111};
+localparam logic [RS_PAR_LEN : 0][EGF_ORDER - 1 : 0] RS_GEN_POL = '{'b0001, 'b1101, 'b1100, 'b1000, 'b0111};
 //localparam logic [RS_PAR_LEN : 0][EGF_ORDER - 1 : 0] RS_GEN_POL = '{'b0001, 'b0111, 'b1001, 'b0011, 'b1100, 'b1010, 'b1100};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,15 +28,32 @@ localparam ENC_SYM_NUM = 4;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-localparam ENC_PHA_NUM = 5;
+//localparam ENC_PHA_NUM = 5;
 
-typedef enum logic [$clog2(ENC_PHA_NUM) - 1 : 0] {
-    ENC_PHA_IDL,
-    ENC_PHA_INP,
-    ENC_PHA_IVO,
-    ENC_PHA_REG,
-    ENC_PHA_RVI
-} ENC_PHASE;
+//typedef enum logic [$clog2(ENC_PHA_NUM) - 1 : 0] {
+//    ENC_PHA_IDL,
+//    ENC_PHA_INP,
+//    ENC_PHA_IVO,
+//    ENC_PHA_REG,
+//    ENC_PHA_RVI
+//} ENC_PHASE;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+localparam CON_PHA_NUM = 3;
+localparam FOR_PHA_NUM = 3;
+
+typedef enum logic [$clog2(CON_PHA_NUM) - 1 : 0] {
+    CON_IDL,
+    CON_STA,
+    CON_WOR
+} CON_PHASE;
+
+typedef enum logic [$clog2(FOR_PHA_NUM) - 1 : 0] {
+    FOR_IDL,
+    FOR_HAL,
+    FOR_FUL
+} FOR_PHASE;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -7,9 +7,10 @@
 module enc_formatter (
     input clk,
     input rst_n,
-    input [$clog2(RS_COD_LEN) - 1 : 0] con_master_counter,
+    input [$clog2(RS_COD_LEN) - 1 : 0] con_counter,
     input [$clog2(ENC_SYM_NUM + 1) - 1 : 0] buf_request,
     input [2 * ENC_SYM_NUM - 2 : 0][EGF_ORDER - 1 : 0] buf_data,
+    output FOR_PHASE for_phase,
     output logic [RS_MES_LEN % ENC_SYM_NUM - 1 : 0][EGF_ORDER - 1 : 0] for_half_data,
     output logic [ENC_SYM_NUM - 1 : 0][EGF_ORDER - 1 : 0] for_full_data
 );
@@ -20,12 +21,12 @@ module enc_formatter (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     always_comb begin
-        if (con_master_counter < ENC_SYM_NUM && con_master_counter >= RS_MES_LEN % ENC_SYM_NUM) begin
-            for_offset = con_master_counter - RS_MES_LEN % ENC_SYM_NUM;
-        end else if (con_master_counter < ENC_SYM_NUM) begin
-            for_offset = con_master_counter;
-        end else if (con_master_counter < RS_MES_LEN + ENC_SYM_NUM) begin
-            for_offset = con_master_counter + ENC_SYM_NUM - RS_MES_LEN % ENC_SYM_NUM;
+        if (con_counter < ENC_SYM_NUM && con_counter >= RS_MES_LEN % ENC_SYM_NUM) begin
+            for_offset = con_counter - RS_MES_LEN % ENC_SYM_NUM;
+        end else if (con_counter < ENC_SYM_NUM) begin
+            for_offset = con_counter;
+        end else if (con_counter < RS_MES_LEN + ENC_SYM_NUM) begin
+            for_offset = con_counter + ENC_SYM_NUM - RS_MES_LEN % ENC_SYM_NUM;
         end else begin
             for_offset = '0;
         end
@@ -51,6 +52,20 @@ module enc_formatter (
         end
     end
     
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    always_comb begin
+        if (con_counter < RS_MES_LEN % ENC_SYM_NUM) begin
+            for_phase = FOR_IDL;
+        end else if (con_counter < ENC_SYM_NUM + RS_MES_LEN % ENC_SYM_NUM) begin
+            for_phase = FOR_HAL;
+        end else if (con_counter < RS_MES_LEN + ENC_SYM_NUM) begin
+            for_phase = FOR_FUL;
+        end else begin
+            for_phase = FOR_IDL;
+        end
+    end
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     always_comb begin

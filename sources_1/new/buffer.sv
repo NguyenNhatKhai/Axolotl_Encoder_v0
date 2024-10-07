@@ -7,7 +7,7 @@
 module enc_buffer (
     input clk,
     input rst_n,
-    input [$clog2(RS_COD_LEN) - 1 : 0] con_master_counter,
+    input [$clog2(RS_COD_LEN) - 1 : 0] con_counter,
     input [ENC_SYM_NUM - 1 : 0][EGF_ORDER - 1 : 0] enc_data,
     output logic buf_enable,
     output logic [$clog2(ENC_SYM_NUM + 1) - 1 : 0] buf_request,
@@ -21,15 +21,15 @@ module enc_buffer (
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     always_comb begin
-        if (con_master_counter == '0) begin
+        if (con_counter == '0) begin
             buf_request = '0;
-        end else if (con_master_counter < ENC_SYM_NUM) begin
-            buf_request = con_master_counter;
-        end else if (con_master_counter < RS_MES_LEN) begin
+        end else if (con_counter < ENC_SYM_NUM) begin
+            buf_request = con_counter;
+        end else if (con_counter < RS_MES_LEN) begin
             buf_request = ENC_SYM_NUM;
-        end else if (con_master_counter < ENC_SYM_NUM + RS_MES_LEN) begin
-            buf_request = RS_MES_LEN + ENC_SYM_NUM - con_master_counter;
-        end else if (con_master_counter <= RS_COD_LEN) begin
+        end else if (con_counter < ENC_SYM_NUM + RS_MES_LEN) begin
+            buf_request = RS_MES_LEN + ENC_SYM_NUM - con_counter;
+        end else if (con_counter <= RS_COD_LEN) begin
             buf_request = '0;
         end else begin
             buf_request = '0;
@@ -41,8 +41,8 @@ module enc_buffer (
     always_ff @(posedge clk) begin
         if (!rst_n) begin
             buf_counter <= '0;
-        end else if (con_master_counter == RS_COD_LEN) begin
-            buf_counter <= con_master_counter + ENC_SYM_NUM - RS_COD_LEN;
+        end else if (con_counter == RS_COD_LEN) begin
+            buf_counter <= con_counter + ENC_SYM_NUM - RS_COD_LEN;
         end else if (buf_enable) begin
             buf_counter <= buf_counter + ENC_SYM_NUM - buf_request;
         end else if (!buf_enable) begin
