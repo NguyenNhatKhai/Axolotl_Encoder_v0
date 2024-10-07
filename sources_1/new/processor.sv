@@ -45,11 +45,7 @@ module enc_processor (
             for (int i = RS_PAR_LEN - 1; i >= 0; i --) begin
                 pro_data_reg[i] <= '0;
             end
-        end else if (for_phase == FOR_HAL) begin
-            for (int i = RS_PAR_LEN - 1; i >= 0; i --) begin
-                pro_data_reg[i] <= pro_data[i];
-            end
-        end else if (for_phase == FOR_FUL) begin
+        end else if (for_phase == FOR_HAL || for_phase == FOR_FUL) begin
             for (int i = RS_PAR_LEN - 1; i >= 0; i --) begin
                 pro_data_reg[i] <= pro_data[i];
             end
@@ -63,12 +59,9 @@ module enc_processor (
     
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    logic [RS_PAR_LEN - 1 : 0][EGF_ORDER - 1 : 0] pro_data_temp;
-    
     always_comb begin
-        for (int i = RS_PAR_LEN - 1; i >= 0; i --) begin
-            pro_data_temp[i] = pro_data_reg[i];
-        end
+        logic [RS_PAR_LEN - 1 : 0][EGF_ORDER - 1 : 0] pro_data_temp;
+        pro_data_temp = pro_data_reg;
         if (for_phase == FOR_HAL) begin
             for (int i = RS_MES_LEN % ENC_SYM_NUM - 1; i >= 0; i --) begin
                 for (int j = RS_PAR_LEN - 1; j > 0; j --) begin
@@ -89,6 +82,8 @@ module enc_processor (
                     pro_data_temp[j] = pro_data[j];
                 end
             end
+        end else begin
+            pro_data = '0;
         end
     end
 

@@ -28,24 +28,12 @@ localparam ENC_SYM_NUM = 4;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//localparam ENC_PHA_NUM = 5;
-
-//typedef enum logic [$clog2(ENC_PHA_NUM) - 1 : 0] {
-//    ENC_PHA_IDL,
-//    ENC_PHA_INP,
-//    ENC_PHA_IVO,
-//    ENC_PHA_REG,
-//    ENC_PHA_RVI
-//} ENC_PHASE;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 localparam CON_PHA_NUM = 3;
 localparam FOR_PHA_NUM = 3;
 
 typedef enum logic [$clog2(CON_PHA_NUM) - 1 : 0] {
     CON_IDL,
-    CON_STA,
+    CON_PRE,
     CON_WOR
 } CON_PHASE;
 
